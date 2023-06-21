@@ -1,6 +1,6 @@
 <script setup>
-import { API_URL, criadorId, criadorNome } from "@/utils/constants"
-import { ref } from "vue"
+import { API_URL, criadorId, criadorNome } from "@/Utils/Url"
+import { ref, onMounted } from "vue"
 
 const newEmployee = ref({
   nome: "",
@@ -10,11 +10,11 @@ const newEmployee = ref({
   ativo: true
 })
 let id = 0
-const list = ref([])
+const listEmplowee = ref([])
 
 const fetchEmployeeList = async () => {
   const response = await fetch(`${API_URL}/funcionario?criadorId=${criadorId}`)
-  list.value = (await response.json()).map(employee => ({
+  listEmplowee.value = (await response.json()).map(employee => ({
     id: employee.id,
     nome: employee.nome,
     sobrenome: employee.sobrenome,
@@ -23,7 +23,8 @@ const fetchEmployeeList = async () => {
     ativo: employee.ativo,
     criador: employee.criador.nome
   }))
-  id = list[list.value.length - 1].id + 1
+  id = listEmplowee.value.length > 0 ? listEmplowee.value[listEmplowee.value.length - 1].id + 1 : 0;
+
 }
 
 const createEmployee = async () => {
@@ -33,7 +34,7 @@ await fetch(`${API_URL}/funcionario`, {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({... newEmployee.value,
-       dataInicio: (new Date(newEmployee.value.dataInicio)).toISOString(),
+      dataInicio: new Date(newEmployee.value.dataInicio).toISOString(),
         id,
          criador: { id: criadorId, nome: criadorNome } }),
 })
@@ -46,6 +47,9 @@ newEmployee.value = {
   }
   fetchEmployeeList()
 }
+onMounted(() => {
+  fetchEmployeeList()
+})
 
 </script>
 
