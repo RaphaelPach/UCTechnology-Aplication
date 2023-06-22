@@ -1,6 +1,6 @@
 <script setup>
 import { API_URL, criadorId, criadorNome } from "@/Utils/Url"
-import { ref, onMounted } from "vue"
+import { ref,  onMounted } from "vue"
 
 const newEmployee = ref({
   nome: "",
@@ -10,11 +10,11 @@ const newEmployee = ref({
   ativo: true
 })
 let id = 0
-const listEmplowee = ref([])
-
+ const listEmployee = ref([])
+ 
 const fetchEmployeeList = async () => {
   const response = await fetch(`${API_URL}/funcionario?criadorId=${criadorId}`)
-  listEmplowee.value = (await response.json()).map(employee => ({
+  listEmployee.value = (await response.json()).map(employee => ({
     id: employee.id,
     nome: employee.nome,
     sobrenome: employee.sobrenome,
@@ -23,7 +23,7 @@ const fetchEmployeeList = async () => {
     ativo: employee.ativo,
     criador: employee.criador.nome
   }))
-  id = listEmplowee.value.length > 0 ? listEmplowee.value[listEmplowee.value.length - 1].id + 1 : 0;
+  id = listEmployee.value.length > 0 ? listEmployee.value[listEmployee.value.length - 1].id + 1 : 0;
 
 }
 
@@ -34,9 +34,10 @@ await fetch(`${API_URL}/funcionario`, {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({... newEmployee.value,
-      dataInicio: new Date(newEmployee.value.dataInicio).toISOString(),
+      dataInicio: (new Date(newEmployee.value.dataInicio)).toISOString(),
         id,
          criador: { id: criadorId, nome: criadorNome } }),
+  
 })
 newEmployee.value = {
     nome: "",
@@ -45,7 +46,7 @@ newEmployee.value = {
     dataInicio: "",
     ativo: true
   }
-  fetchEmployeeList()
+ fetchEmployeeList()
 }
 onMounted(() => {
   fetchEmployeeList()
@@ -54,17 +55,37 @@ onMounted(() => {
 </script>
 
 <template>
-<div class="flex gap-2">
-  <form @submit.prevent="createEmployee" class="flex flex-col gap-2 border p-2">
-    <div>
-      Novos Funcionários
-    </div>
-    <input class="bg-gray-100 rounded px-2 py-1 border border-gray-200" type="text" placeholder="Nome"/>
-    <input class="bg-gray-100 rounded px-2 py-1 border border-gray-200" type="text" placeholder="Sobrenome"/>
-    <input class="bg-gray-100 rounded px-2 py-1 border border-gray-200" type="text" placeholder="Cargo"/>
-    <input class="bg-gray-100 rounded px-2 py-1 border border-gray-200" type="datetime-local" placeholder="Data de Início"/>
-    <input type="checkbox" placeholder="Nome"/>
-    <button class="bg-gray-100 hover:bg-gray-200 hover:border-gray-300 transition rounded px-2 py-1 border border-gray-200" type="submit">Salvar</button>
-  </form>
-</div>
+  <div>
+      
+      <form @submit.prevent="createEmployee">
+        <div>
+          Crie seu funcionário UCTechnology
+        </div>
+        <input type="text" placeholder="Nome" v-model="newEmployee.nome" />
+        <input type="text" placeholder="Sobrenome" v-model="newEmployee.sobrenome" />
+        <input type="text" placeholder="Cargo" v-model="newEmployee.cargo" />
+        <input type="datetime-local" placeholder="Data de Início" v-model="newEmployee.dataInicio" />
+        <input type="checkbox" placeholder="Nome" v-model="newEmployee.ativo" />
+        <button type="submit">Cadastrar</button>
+      </form>
+        </div>
+
+        <div>
+        <table>
+         <thead>
+          <th>
+            <td v-for="(header, i ) in Object.keys(listEmployee[0] || [])" :key="`Header-${i}`">
+            {{ header }}
+            </td>
+          </th>
+         </thead>
+         <tbody>
+          <tr v-for="(item, i) in listEmployee" :key="`Row-${i}`">
+            <td v-for="(value, j) in Object.values(item)" :key="`Cell-${i}-${j}`">
+              {{ value }}
+            </td>
+          </tr>
+         </tbody>
+        </table>
+        </div>
 </template>
