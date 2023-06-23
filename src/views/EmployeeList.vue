@@ -10,6 +10,7 @@ const newEmployee = ref({
   ativo: true
 })
 let id = 0
+const editEmployee = ref(null)
  const listEmployee = ref([])
  
 const fetchEmployeeList = async () => {
@@ -63,6 +64,22 @@ const deleteEmployee = async (id) => {
   fetchEmployeeList()
 }
 
+const selectEmployee = (employee) => {
+  editEmployee.value = { ...employee }
+}
+
+const putEmployee = async () => {
+  await fetch(`${API_URL}/funcionario`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({... editEmployee.value, dataInicio: (new Date(editEmployee.value.dataInicio)).toISOString(), criador: { id: criadorId, nome: criadorNome } }),
+  })
+  editEmployee.value = null
+  fetchEmployeeList()
+}
+
 </script>
 
 <template>
@@ -71,7 +88,8 @@ const deleteEmployee = async (id) => {
     <div class="container mx-auto flex items-center justify-between px-4">
       <h1 class="text-3xl font-bold">UC Technology</h1>
       <nav>
-        <a href="#" class="text-white hover:text-blue-200 ml-4">About me</a>
+        <router-link to="/about" class="nav-link text-white hover:text-blue-200 ml-4">About Me</router-link>
+
       </nav>
     </div>
   </header>
@@ -92,8 +110,27 @@ const deleteEmployee = async (id) => {
         </label>
         <button type="submit" class="btn">Cadastrar</button>
       </form>
-    </div>
-    
+      <form v-if="editEmployee" @submit.prevent="putEmployee" class="flex flex-col gap-2 border p-2">
+        <div class="container mx-auto p-8 mt-8">
+  <div class="text-lg font-semibold">
+    Editar funcionário
+    <div class="container mx-auto p-8 mt-8">
+  <div class="text-lg font-semibold">
+    Editar funcionário
+  </div>
+  <form  v-if="editEmployee" @submit.prevent="editEmployee">
+    <input class="bg-gray-100 rounded px-2 py-1 border border-gray-200 mt-2" type="text" placeholder="Nome" v-model="editEmployee.nome" />
+    <input class="bg-gray-100 rounded px-2 py-1 border border-gray-200 mt-2" type="text" placeholder="Sobrenome" v-model="editEmployee.sobrenome" />
+    <input class="bg-gray-100 rounded px-2 py-1 border border-gray-200 mt-2" type="text" placeholder="Cargo" v-model="editEmployee.cargo" />
+    <input class="bg-gray-100 rounded px-2 py-1 border border-gray-200 mt-2" type="datetime-local" placeholder="Data de Início" v-model="editEmployee.dataInicio" />
+    <input type="checkbox" placeholder="Nome" v-model="editEmployee.ativo" />
+    <button class="bg-gray-100 hover:bg-gray-200 hover:border-gray-300 transition rounded px-2 py-1 border border-gray-200 mt-2" type="submit">Salvar</button>
+  </form>
+</div>
+</div>
+</div>
+</form>
+</div>  
     <div class="container mx-auto p-8 mt-8">
       <table class="w-full">
         <thead>
@@ -113,7 +150,7 @@ const deleteEmployee = async (id) => {
             </td>
             <td class="py-4 px-6 border-b border-gray-300">
               <button @click="() => deleteEmployee(item.id)" class="bg-gray-100 hover:bg-red-200 hover:border-red-300 transition rounded px-2 py-1 border border-gray-200">Deletar</button>
-              <button class="bg-gray-100 hover:bg-blue-200 hover:border-blue-300 transition rounded px-2 py-1 border border-gray-200">Atualizar</button>
+              <button @click="() => selectEmployee(item)" class="bg-gray-100 hover:bg-blue-200 hover:border-blue-300 transition rounded px-2 py-1 border border-gray-200">Atualizar</button>
         </td>
       </tr>
     </tbody>
