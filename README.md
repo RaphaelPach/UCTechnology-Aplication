@@ -23,10 +23,13 @@ Certifique-se de ter o Node.js instalado em sua máquina.
 2. Navegue até o diretório da aplicação:
    ```shell
    cd Processo-UCTechnology
-3. Após a conclusão da instalação, execute o seguinte comando para iniciar a aplicação:
+3. Instale as dependências do projeto usando o npm:
+   ```shell
+   npm install
+4. Após a conclusão da instalação, execute o seguinte comando para iniciar a aplicação:
    ```shell
    npm run dev
-4. A aplicação será iniciada e estará acessível em seu navegador através do seguinte endereço:
+5. A aplicação será iniciada e estará acessível em seu navegador através do seguinte endereço:
    ```shell
    http://localhost:5173
 
