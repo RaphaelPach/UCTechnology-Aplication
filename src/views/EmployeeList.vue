@@ -97,44 +97,56 @@ const handleShowModal = () => {
 </script>
 
 <template>
-  <div>
-    <header class="bg-[#89beea] text-white w-full h-[50px] shadow">
+  <div class=" flex flex-col justify-between h-screen">
+    <header class="bg-[#89beea] text-white w-full h-[50px] shadow-md">
       <div class="container mx-auto flex items-center justify-between px-4">
         <h1 class="text-3xl font-bold">UC Technology</h1>
       </div>
     </header>
     <div class="container mx-auto p-8 mt-8">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold">Cadastro</h2>
+        <h2 class="text-2xl font-bold w-3/4 m-[auto]">Cadastro</h2>
       </div>
-      <div class="min-h-screen bg-[#d5e8f8] rounded-lg">
+      <div class="w-3/4 bg-[#d5e8f8] m-[auto] rounded-lg">
         <div class="container mx-auto p-8">
-          <form @submit.prevent="createEmployee" class="flex flex-col space-y-4 items-center">
-            <input
-              type="text"
-              placeholder="Nome"
-              v-model="newEmployee.nome"
-              class="input"
-            />
-            <input
+          <form @submit.prevent="createEmployee" class=" flex flex-col items-center">
+            <div class="flex w-full">
+              <div class="px-2 firstname">
+              <input
+                type="text"
+                placeholder="Nome"
+                v-model="newEmployee.nome"
+                class="w-full rounded-md h-[30px] pl-3"
+              />
+              </div>
+              <div class="px-2 secondname">
+              <input
               type="text"
               placeholder="Sobrenome"
               v-model="newEmployee.sobrenome"
-              class="input"
-            />
-            <select
-              v-model="newEmployee.cargo"
-              class="input bg-white"
-            >
-             <option value="DESENVOLVEDOR" selected>DESENVOLVEDOR</option>
-             <option value="ADMINISTRADOR">ADMINISTRADOR</option>
-          </select>
-            <input
-              type="datetime-local"
-              placeholder="Data de Início"
-              v-model="newEmployee.dataInicio"
-              class="input"
-            />
+              class="w-full rounded-md h-[30px] pl-3"
+              />
+            </div>
+          </div>
+          <div class="flex w-full my-2">
+            <div class="cargo px-2">
+              <select
+                v-model="newEmployee.cargo"
+                class="w-full bg-white h-[30px] pl-3"
+              >
+                <option value="DESENVOLVEDOR" selected>DESENVOLVEDOR</option>
+                <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+              </select>
+            </div>
+              <div class="date px-2">
+                <input
+                  type="datetime-local"
+                  placeholder="Data de Início"
+                  v-model="newEmployee.dataInicio"
+                  class="w-full rounded-md h-[30px] pl-3"
+                />
+              </div>
+          </div>
             <label class="flex items-center space-x-2">
               <input type="checkbox" v-model="newEmployee.ativo" class="form-checkbox" />
               <span>Ativo</span>
@@ -142,40 +154,52 @@ const handleShowModal = () => {
             <button type="submit" class="btn">Cadastrar</button>
           </form>
           <form v-if="editEmployee"
-           @submit.prevent="putEmployee" class="flex flex-col space-y-4 items-center">
+           @submit.prevent="putEmployee"  class=" flex flex-col items-center">
             <div class="container p-8 mt-8">
               <div class="text-lg font-semibold">
                 Atualizar Cadastro
               </div>
               <form v-if="editEmployee" @submit.prevent="putEmployee"
               class="flex flex-col space-y-4 items-center">
-                <input
-                  class="input"
-                  type="text"
-                  placeholder="Nome"
-                  v-model="editEmployee.nome"
-                />
-                <input
-                  class="input"
+              <div class="flex w-full">
+                <div class="px-2 firstname">
+                  <input
+                    class="w-full rounded-md h-[30px] pl-3"
+                    type="text"
+                    placeholder="Nome"
+                    v-model="editEmployee.nome"
+                  />
+              </div>
+                <div class="px-2 secondname">
+                  <input
+                  class="w-full rounded-md h-[30px] pl-3"
                   type="text"
                   placeholder="Sobrenome"
                   v-model="editEmployee.sobrenome"
-                />
-                <select
-                  v-model="newEmployee.cargo"
-                  class="input bg-white"
-                >
-                  <option value="DESENVOLVEDOR" selected>DESENVOLVEDOR</option>
-                  <option value="ADMINISTRADOR">ADMINISTRADOR</option>
-                </select>
+                  />
+                </div>
+              </div>
+              <div class="flex w-full my-2">
+                  <div class="cargo px-2">
+                    <select
+                    v-model="newEmployee.cargo"
+                    class="w-full bg-white h-[30px] pl-3"
+                  >
+                    <option value="DESENVOLVEDOR" selected>DESENVOLVEDOR</option>
+                    <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+                    </select>
+                </div>
+              <div class="date px-2">
                 <input
-                  class="input"
+                  class="w-full rounded-md h-[30px] pl-3"
                   type="datetime-local"
                   placeholder="Data de Início"
                   v-model="editEmployee.dataInicio"
                 />
+              </div>
+              </div>
                 <button
-                  class="btn"
+                  class="btn h-[45px]"
                   type="submit"
                 >
                   Salvar
@@ -184,7 +208,7 @@ const handleShowModal = () => {
             </div>
           </form>
         </div>
-        <div class="container mx-auto p-8 mt-8 overflow-scroll overflow-y-hidden rounded-lg">
+        <div class="container mx-auto p-8 mt-8 overflow-auto overflow-y-hidden rounded-lg">
           <table class=" mx-auto sm:w-16 lg:w-48 bg-white rounded-lg">
             <thead>
               <tr>
@@ -237,7 +261,7 @@ const handleShowModal = () => {
         </div>
       </div>
     </div>
-    <footer class="bg-gray-200 shadow-lg">
+    <footer class="bg-gray-200 bottom-0 w-full">
       <div class="container mx-auto py-4 px-8 flex items-center justify-between">
         <p class="text-gray-600">Developed by Raphael Pacheco</p>
         <p class="text-gray-600">© 2023 All rights reserved</p>
@@ -247,11 +271,21 @@ const handleShowModal = () => {
 </template>
 
 <style>
-.input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 0.25rem;
+.firstname {
+  width: 50%;
+  outline: none;
+}
+
+.secondname {
+  width: 50%;
+  outline: none;
+}
+.cargo {
+  width: 75%;
+  outline: none;
+}
+.date {
+  width: 25%;
   outline: none;
 }
 
