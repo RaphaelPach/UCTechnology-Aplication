@@ -1,11 +1,15 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/solid';
 import { API_URL, criadorId, criadorNome } from '../Utils/Url';
+import ModalComponent from './ModalComponent.vue';
+
+const showModal = ref(false);
 
 const newEmployee = ref({
   nome: '',
   sobrenome: '',
-  cargo: '',
+  cargo: 'DESENVOLVEDOR',
   dataInicio: '',
   ativo: true,
 });
@@ -20,8 +24,8 @@ const fetchEmployeeList = async () => {
     nome: employee.nome,
     sobrenome: employee.sobrenome,
     cargo: employee.cargo,
-    dataInicio: employee.dataInicio,
-    ativo: employee.ativo,
+    dataInicio: employee.dataInicio.split('T').at(0).replaceAll('-', '/'),
+    status: employee.ativo && 'Ativo',
     criador: employee.criador.nome,
   }));
   index = listEmployee.value.length > 0
@@ -86,28 +90,24 @@ const putEmployee = async () => {
   fetchEmployeeList();
 };
 
+const handleShowModal = () => {
+  showModal.value = !showModal.value;
+};
+
 </script>
 
 <template>
   <div>
-    <header class="bg-blue-500 text-white w-full">
+    <header class="bg-[#89beea] text-white w-full h-[50px] shadow">
       <div class="container mx-auto flex items-center justify-between px-4">
         <h1 class="text-3xl font-bold">UC Technology</h1>
-        <nav>
-          <router-link
-            to="/about"
-            class="nav-link text-white hover:text-blue-200 ml-4"
-          >
-            About Me
-          </router-link>
-        </nav>
       </div>
     </header>
     <div class="container mx-auto p-8 mt-8">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold">Crie seu funcionário UCTechnology</h2>
+        <h2 class="text-2xl font-bold">Cadastro</h2>
       </div>
-      <div class="min-h-screen bg-gray-100">
+      <div class="min-h-screen bg-[#d5e8f8] rounded-lg">
         <div class="container mx-auto p-8">
           <form @submit.prevent="createEmployee" class="flex flex-col space-y-4 items-center">
             <input
@@ -122,12 +122,13 @@ const putEmployee = async () => {
               v-model="newEmployee.sobrenome"
               class="input"
             />
-            <input
-              type="select"
-              placeholder="Cargo"
+            <select
               v-model="newEmployee.cargo"
-              class="input"
-            />
+              class="input bg-white"
+            >
+             <option value="DESENVOLVEDOR" selected>DESENVOLVEDOR</option>
+             <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+          </select>
             <input
               type="datetime-local"
               placeholder="Data de Início"
@@ -144,9 +145,10 @@ const putEmployee = async () => {
            @submit.prevent="putEmployee" class="flex flex-col space-y-4 items-center">
             <div class="container p-8 mt-8">
               <div class="text-lg font-semibold">
-                Editar funcionário
+                Atualizar Cadastro
               </div>
-              <form v-if="editEmployee" @submit.prevent="putEmployee">
+              <form v-if="editEmployee" @submit.prevent="putEmployee"
+              class="flex flex-col space-y-4 items-center">
                 <input
                   class="input"
                   type="text"
@@ -159,26 +161,21 @@ const putEmployee = async () => {
                   placeholder="Sobrenome"
                   v-model="editEmployee.sobrenome"
                 />
-                <input
-                  class="input"
-                  type="text"
-                  placeholder="Cargo"
-                  v-model="editEmployee.cargo"
-                />
+                <select
+                  v-model="newEmployee.cargo"
+                  class="input bg-white"
+                >
+                  <option value="DESENVOLVEDOR" selected>DESENVOLVEDOR</option>
+                  <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+                </select>
                 <input
                   class="input"
                   type="datetime-local"
                   placeholder="Data de Início"
                   v-model="editEmployee.dataInicio"
                 />
-                <input
-                  type="checkbox"
-                  placeholder="Nome"
-                  v-model="editEmployee.ativo"
-                />
                 <button
-                  class="bg-gray-100 hover:bg-gray-200 hover:border-gray-300
-                   transition rounded px-2 py-1 border border-gray-200 mt-2"
+                  class="btn"
                   type="submit"
                 >
                   Salvar
@@ -187,8 +184,8 @@ const putEmployee = async () => {
             </div>
           </form>
         </div>
-        <div class="container mx-auto p-8 mt-8 overflow-scroll">
-          <table class=" mx-auto sm:w-16 lg:w-48">
+        <div class="container mx-auto p-8 mt-8 overflow-scroll overflow-y-hidden rounded-lg">
+          <table class=" mx-auto sm:w-16 lg:w-48 bg-white rounded-lg">
             <thead>
               <tr>
                 <th
@@ -217,18 +214,21 @@ const putEmployee = async () => {
                 </td>
                 <td class="py-4 px-6 border-b border-gray-300">
                   <button
-                    @click="() => deleteEmployee(item.id)"
+                    @click="() => showModal = true"
                     class="bg-gray-100 hover:bg-red-200 hover:border-red-300
                      transition rounded px-2 py-1 border border-gray-200"
                   >
-                    Deletar
+                    <TrashIcon class="h-[20px] w-[40px] text-[red]"/>
                   </button>
+                  <ModalComponent v-if="showModal"
+                   :deleteEmployee="deleteEmployee" :id="item.id"
+                  :handleShowModal="handleShowModal"/>
                   <button
                     @click="() => selectEmployee(item)"
                     class="bg-gray-100 hover:bg-blue-200 hover:border-blue-300
                      transition rounded px-2 py-1 border border-gray-200"
                   >
-                    Atualizar
+                  <PencilSquareIcon class="h-[20px] w-[40px] text-[#89beea]" />
                   </button>
                 </td>
               </tr>
@@ -256,7 +256,7 @@ const putEmployee = async () => {
 }
 
 .btn {
-  background-color: #0078D7;
+  background-color: #89beea;
   color: white;
   font-weight: bold;
   padding: 0.5rem 1rem;
