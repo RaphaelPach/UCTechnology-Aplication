@@ -1,57 +1,37 @@
 # Aplicação-UcTechnology-Raphael
 
-This template should help get you started developing with Vue 3 in Vite.
 
-## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+![UCtechnology](https://github.com/RaphaelPach/UCTechnology-Aplication/assets/106779272/ce69e7d8-d0b2-43c4-ac7a-3fd14894bbdf)
 
-## Customize configuration
+Este é o readme da minha aplicação desenvolvida para a empresa UC Technology com o framework Vue.js versão 3 e estilizada utilizando Tailwind CSS.
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Instruções de Uso
 
-## Project Setup
+Siga as instruções abaixo para instalar e executar a aplicação em seu ambiente local.
 
-```sh
-npm install
-```
+### Pré-requisitos
 
-### Compile and Hot-Reload for Development
+Certifique-se de ter o Node.js instalado em sua máquina.
 
-```sh
-npm run dev
-```
+### Instalação
 
-### Compile and Minify for Production
+1. Faça o clone deste repositório para o seu ambiente local:
+   
+   ```shell
+   git clone git@github.com:RaphaelPach/UCTechnology-Aplication.git
+2. Navegue até o diretório da aplicação:
+   ```shell
+   cd Processo-UCTechnology
+3. Após a conclusão da instalação, execute o seguinte comando para iniciar a aplicação:
+   ```shell
+   npm run dev
+4. A aplicação será iniciada e estará acessível em seu navegador através do seguinte endereço:
+   ```shell
+   http://localhost:5173
 
-```sh
-npm run build
-```
+  Considerações Finais
+  Agora você pode desfrutar da minha aplicação desenvolvida com Vue.js 3 e estilizada com Tailwind CSS. Se surgirem dúvidas ou problemas, sinta-se à vontade       para entrar em contato.
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+  Divirta-se e aproveite! 🚀
 
-```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
-
-```sh
-npm run test:e2e:dev
-```
-
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
-npm run build
-npm run test:e2e
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
